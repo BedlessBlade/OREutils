@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "oreutils",
+	"version": "${version}",
+	"name": "OREUtils",
+	"description": "a QoL mod for the minecraft redstone server ORE",
+	"authors": [
+		"Eithanz"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/oreutils/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.eithan.oreutils.OREUtils"
+		],
+		"client": [
+			"net.eithan.oreutils.OREUtilsClient"
+		],
+		"fabric-datagen": [
+			"net.eithan.oreutils.OREUtilsDataGenerator"
+		]
+	},
+	"mixins": [
+		"oreutils.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.10",
+		"minecraft": "~1.20.6",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
