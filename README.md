@@ -12,7 +12,7 @@ commands include:
 it also adds autocompletion and shortening to server switching commands:
 * `/build, /b`
 * `/school, /s`
-* `/competition`
+* `/competition, /comp`
 * `/seasonal`
 
 in addition it also says "wb" automatically anytime someone not from your blocklist joins

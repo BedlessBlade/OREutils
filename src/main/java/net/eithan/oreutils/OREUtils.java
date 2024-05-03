@@ -1,9 +1,13 @@
 package net.eithan.oreutils;
 
+import net.eithan.oreutils.events.OnChatMessageEvent;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.eithan.oreutils.commands.*;
 
 public class OREUtils implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -18,6 +22,22 @@ public class OREUtils implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("Initializing OREUtils!");
+		registerCommands();
+		LOGGER.info("Registered All Commands.");
+		registerEvents();
+		LOGGER.info("Registered All Events.");
+		LOGGER.info("Finished Initializing OREUtils!");
+	}
+
+	public static void registerCommands() {
+		ClientCommandRegistrationCallback.EVENT.register(BuildCommand::register);
+		ClientCommandRegistrationCallback.EVENT.register(SchoolCommand::register);
+		ClientCommandRegistrationCallback.EVENT.register(CompCommand::register);
+		ClientCommandRegistrationCallback.EVENT.register(SeasonalCommand::register);
+	}
+
+	public static void registerEvents() {
+		ClientReceiveMessageEvents.ALLOW_GAME.register(new OnChatMessageEvent());
 	}
 }
