@@ -78,6 +78,12 @@ public class ConfigManager {
 
     }
 
+    public void resetConfig() throws IOException {
+        PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8);
+        writer.write( configContents );
+        writer.close();
+    }
+
     private void loadConfig() throws IOException {
         Scanner reader = new Scanner( file );
         for( int line = 1; reader.hasNextLine(); line ++ ) {

@@ -23,7 +23,7 @@ public class ModConfigs {
         for(int i = 0; i < BLOCK_LIST.size() ; i++) {
             if (BLOCK_LIST.get(i).equals(blockedName)) {
                 BLOCK_LIST.remove(i);
-                configs.set(new Pair<>("block_list", BLOCK_LIST.toString()));
+                configs.set(new Pair<>("block_list", "[" + String.join(", ", BLOCK_LIST) + "]"));
                 return true;
             }
         }
@@ -99,8 +99,11 @@ public class ModConfigs {
         BLOCK_LIST = new ArrayList<>(Arrays.stream(block_list_hold.substring(1, block_list_hold.length() - 1).split(", ")).toList());
         String plot_coordinates_hold = configs.get("plot_coordinates");
         PLOT_COORDINATES = new ArrayList<>();
-        for(String coordinate : plot_coordinates_hold.substring(2, plot_coordinates_hold.length() - 2).split("], \\[")) {
-            PLOT_COORDINATES.add(Arrays.stream(coordinate.split(",")).mapToInt(Integer::parseInt).toArray());
+        String split_coordinates = plot_coordinates_hold.substring(1, plot_coordinates_hold.length() - 1);
+        if(!split_coordinates.isEmpty()) {
+            for (String coordinate : split_coordinates.substring(1, split_coordinates.length() - 1).split("], \\[")) {
+                PLOT_COORDINATES.add(Arrays.stream(coordinate.split(",")).mapToInt(Integer::parseInt).toArray());
+            }
         }
         HIDE_BLOCKED_MESSAGES = Boolean.parseBoolean(configs.get("hide_blocked_messages"));
         HIDE_BLOCKED_PLAYERS = Boolean.parseBoolean(configs.get("hide_blocked_players"));
