@@ -1,5 +1,6 @@
 package net.eithan.oreutils;
 
+import net.eithan.oreutils.config.ModConfigs;
 import net.eithan.oreutils.events.OnChatMessageEvent;
 import net.fabricmc.api.ModInitializer;
 
@@ -21,8 +22,9 @@ public class OREUtils implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-
 		LOGGER.info("Initializing OREUtils!");
+		ModConfigs.registerConfigs();
+		LOGGER.info("Registering Configs.");
 		registerCommands();
 		LOGGER.info("Registered All Commands.");
 		registerEvents();
@@ -35,6 +37,7 @@ public class OREUtils implements ModInitializer {
 		ClientCommandRegistrationCallback.EVENT.register(SchoolCommand::register);
 		ClientCommandRegistrationCallback.EVENT.register(CompCommand::register);
 		ClientCommandRegistrationCallback.EVENT.register(SeasonalCommand::register);
+		ClientCommandRegistrationCallback.EVENT.register(BlockListCommands::register);
 	}
 
 	public static void registerEvents() {
