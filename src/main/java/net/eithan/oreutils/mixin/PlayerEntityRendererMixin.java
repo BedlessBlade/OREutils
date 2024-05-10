@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntityRenderer.class)
@@ -24,9 +25,17 @@ public abstract class PlayerEntityRendererMixin{
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if(player == null)
             return;
-        if(ModConfigs.blockListContains(abstractClientPlayerEntity.getName().getString()) && ModConfigs.HIDE_BLOCKED_PLAYERS)
+        if(ModConfigs.blockListContains(abstractClientPlayerEntity.getName().getString()) && ModConfigs.HIDE_BLOCKED_PLAYERS) {
+            renderLabelIfPresent(abstractClientPlayerEntity, abstractClientPlayerEntity.getDisplayName(), matrixStack, vertexConsumerProvider, i, f);
             ci.cancel();
-        Text name_tag = ModConfigs.NAME_TAG_CENSOR ? Text.literal("-CENSORED-") : abstractClientPlayerEntity.getDisplayName();
-        renderLabelIfPresent(abstractClientPlayerEntity, name_tag, matrixStack, vertexConsumerProvider, i, f);
+        }
+    }
+
+    @ModifyArg(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;renderLabelIfPresent(Lnet/minecraft/entity/Entity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IF)V"), index = 1)
+    private Text modifiedLabelRenderArgsMixin(Text in) {
+        if(ModConfigs.NAME_TAG_CENSOR && ModConfigs.blockListContains(in.getString()))
+            return Text.literal("-CENSORED-");
+        else
+            return in;
     }
 }

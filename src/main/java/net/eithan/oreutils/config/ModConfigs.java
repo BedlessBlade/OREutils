@@ -2,6 +2,7 @@ package net.eithan.oreutils.config;
 
 import com.mojang.datafixers.util.Pair;
 import net.eithan.oreutils.OREUtils;
+import net.eithan.oreutils.commands.BlockListCommands;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.ArrayList;
@@ -27,13 +28,15 @@ public class ModConfigs {
     }
 
     public static boolean addToBlockList(String name) {
+        if(name.isBlank())
+            return false;
+        String trimmed_name = name.trim();
         for (String blockedName : BLOCK_LIST) {
-            if (blockedName.equalsIgnoreCase(name)) {
+            if (blockedName.equalsIgnoreCase(trimmed_name)) {
                 return false;
             }
         }
-        BLOCK_LIST.add(name);
-//        configs.set(new Pair<>("block_list", "[" + String.join(", ", BLOCK_LIST) + "]"));
+        BLOCK_LIST.add(trimmed_name);
         configs.set(new Pair<>("block_list", BLOCK_LIST));
         return true;
     }
@@ -42,7 +45,6 @@ public class ModConfigs {
         for(int i = 0; i < BLOCK_LIST.size() ; i++) {
             if (BLOCK_LIST.get(i).equalsIgnoreCase(blockedName)) {
                 BLOCK_LIST.remove(i);
-//                configs.set(new Pair<>("block_list", "[" + String.join(", ", BLOCK_LIST) + "]"));
                 configs.set(new Pair<>("block_list", BLOCK_LIST));
                 return true;
             }
@@ -130,6 +132,8 @@ public class ModConfigs {
     private static void assignConfigs() {
         String block_list_hold = configs.get("block_list");
         BLOCK_LIST = new ArrayList<>(Arrays.stream(block_list_hold.substring(1, block_list_hold.length() - 1).split(", ")).toList());
+        if(BLOCK_LIST.size() == 1 && BLOCK_LIST.getFirst().isBlank())
+            BLOCK_LIST.removeFirst();
         String plot_coordinates_hold = configs.get("plot_coordinates");
         PLOT_COORDINATES = new ArrayList<>();
         String split_coordinates = plot_coordinates_hold.substring(1, plot_coordinates_hold.length() - 1);
