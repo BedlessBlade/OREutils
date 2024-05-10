@@ -20,7 +20,7 @@ public class BlockListCommands {
     private static int showBlockList(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         if(context.getSource().getPlayer() == null)
             return -1;
-        context.getSource().getPlayer().sendMessage(Text.literal(ModConfigs.BLOCK_LIST.toString()));
+        context.getSource().getPlayer().sendMessage(Text.literal("Block list:" + ModConfigs.BLOCK_LIST.toString()));
         return 1;
     }
     private static int addBlockList(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
