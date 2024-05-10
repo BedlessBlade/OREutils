@@ -3,6 +3,7 @@
 	"package": "net.eithan.oreutils.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+		"PlayerEntityRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

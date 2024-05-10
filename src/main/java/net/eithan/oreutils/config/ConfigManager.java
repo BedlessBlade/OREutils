@@ -6,6 +6,8 @@ package net.eithan.oreutils.config;
  */
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -86,8 +88,8 @@ public class ConfigManager {
 
     private void loadConfig() throws IOException {
         Scanner reader = new Scanner( file );
-        for( int line = 1; reader.hasNextLine(); line ++ ) {
-            parseConfigEntry( reader.nextLine(), line );
+        for(int line = 1; reader.hasNextLine(); line++) {
+            parseConfigEntry(reader.nextLine(), line);
         }
     }
 
@@ -109,7 +111,7 @@ public class ConfigManager {
     }
 
     public void set(Pair<String, ?> keyValuePair) {
-        if(config.get(keyValuePair.getFirst().toLowerCase()) == null)
+        if(config.get(keyValuePair.getFirst()) == null)
             return;
         config.put(keyValuePair.getFirst(), keyValuePair.getSecond().toString());
         try {

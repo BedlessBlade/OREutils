@@ -38,6 +38,7 @@ public class OREUtils implements ModInitializer {
 		ClientCommandRegistrationCallback.EVENT.register(CompCommand::register);
 		ClientCommandRegistrationCallback.EVENT.register(SeasonalCommand::register);
 		ClientCommandRegistrationCallback.EVENT.register(BlockListCommands::register);
+		ClientCommandRegistrationCallback.EVENT.register(BooleanCommands::register);
 	}
 
 	public static void registerEvents() {
