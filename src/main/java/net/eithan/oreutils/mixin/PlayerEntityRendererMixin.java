@@ -1,6 +1,7 @@
 package net.eithan.oreutils.mixin;
 
 import net.eithan.oreutils.config.ModConfigs;
+import net.eithan.oreutils.events.EndClientTickEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -8,6 +9,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,9 +27,25 @@ public abstract class PlayerEntityRendererMixin{
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if(player == null)
             return;
-        if(ModConfigs.blockListContains(abstractClientPlayerEntity.getName().getString()) && ModConfigs.HIDE_BLOCKED_PLAYERS) {
-            renderLabelIfPresent(abstractClientPlayerEntity, abstractClientPlayerEntity.getDisplayName(), matrixStack, vertexConsumerProvider, i, f);
-            ci.cancel();
+
+        if(ModConfigs.blockListContains(abstractClientPlayerEntity.getName().getString())) {
+            if(EndClientTickEvent.kickTimer == 0) {
+                Vec3d blockedPlayerPosition = abstractClientPlayerEntity.getPos();
+                for (int[] plot : ModConfigs.PLOT_COORDINATES) {
+                    if (blockedPlayerPosition.x <= plot[0] && blockedPlayerPosition.x >= plot[2] || blockedPlayerPosition.x <= plot[2] && blockedPlayerPosition.x >= plot[0]) {
+                        if (blockedPlayerPosition.z <= plot[1] && blockedPlayerPosition.z >= plot[3] || blockedPlayerPosition.z <= plot[3] && blockedPlayerPosition.z >= plot[1]) {
+                            player.networkHandler.sendChatMessage("/p kick " + abstractClientPlayerEntity.getName().getString());
+                            player.sendMessage(Text.literal("kicked player " + abstractClientPlayerEntity.getName().getString()));
+                            EndClientTickEvent.kickTimer = 40;
+                        }
+                    }
+                }
+            }
+
+            if(ModConfigs.HIDE_BLOCKED_PLAYERS) {
+                renderLabelIfPresent(abstractClientPlayerEntity, abstractClientPlayerEntity.getDisplayName(), matrixStack, vertexConsumerProvider, i, f);
+                ci.cancel();
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.eithan.oreutils.OREUtils;
 import net.eithan.oreutils.commands.BlockListCommands;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,15 +59,18 @@ public class ModConfigs {
         for(int i = 0; i < array.size(); i++) {
             if(i > 0)
                 sb.append(", ");
-            sb.append(Arrays.toString(array.get(i)));
+            sb.append(Arrays.toString(array.get(i)).replace(" ", ""));
         }
         sb.append(']');
         return sb.toString();
     }
 
-    public static void addToPlotCoordinates(int[] plotCoordinate) {
+    public static boolean addToPlotCoordinates(int[] plotCoordinate) {
+        if(PLOT_COORDINATES.size() > 5)
+            return false;
         PLOT_COORDINATES.add(plotCoordinate);
         configs.set(new Pair<>("plot_coordinates", arrayListToString(PLOT_COORDINATES)));
+        return true;
     }
 
     public static boolean removeFromPlotCoordinates(int[] plotCoordinate) {
@@ -121,7 +125,7 @@ public class ModConfigs {
 
     private static void createConfigs() {
         configs.addKeyValuePair(new Pair<>("block_list", "[]"), "list of blocked usernames");
-        configs.addKeyValuePair(new Pair<>("plot_coordinates", "[[0,0,0,0]]"), "list of plot coordinates");
+        configs.addKeyValuePair(new Pair<>("plot_coordinates", "[]"), "list of plot coordinates");
         configs.addKeyValuePair(new Pair<>("hide_blocked_messages", true), "boolean to toggle blocking people in chat or not");
         configs.addKeyValuePair(new Pair<>("hide_blocked_players", true), "boolean to toggle seeing blocked players");
         configs.addKeyValuePair(new Pair<>("kick_on_sight", true), "boolean to toggle kicking blocked people on sight");
@@ -137,6 +141,7 @@ public class ModConfigs {
         String plot_coordinates_hold = configs.get("plot_coordinates");
         PLOT_COORDINATES = new ArrayList<>();
         String split_coordinates = plot_coordinates_hold.substring(1, plot_coordinates_hold.length() - 1);
+        System.out.println(split_coordinates);
         if(!split_coordinates.isEmpty()) {
             for (String coordinate : split_coordinates.substring(1, split_coordinates.length() - 1).split("], \\[")) {
                 PLOT_COORDINATES.add(Arrays.stream(coordinate.split(",")).mapToInt(Integer::parseInt).toArray());

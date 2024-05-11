@@ -7,6 +7,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class OnChatMessageEvent implements ClientReceiveMessageEvents.AllowGame{
     final String[] RANKS = {"Visitor", "Student", "Builder", "Engineer", "Mod", "Admin", "Discord"};
@@ -18,7 +19,7 @@ public class OnChatMessageEvent implements ClientReceiveMessageEvents.AllowGame{
         // if autowb is enabled, and if the message is a join message, and if the player-that-has-joined's username isn't on our block list, and if the player isn't us.
         if(ModConfigs.AUTO_WB && message.getString().contains("has joined the network") && !ModConfigs.blockListContains(message.getString().split(" ")[0].substring(2)) && !message.getString().split(" ")[0].substring(2).equals(player.getName().getString())){
             // send an auto wb and return to not do overly many checks
-            player.networkHandler.sendChatMessage("wb");
+            EndClientTickEvent.wbTimer = new Random().nextInt(40);
             return true;
         }
         if(!ModConfigs.HIDE_BLOCKED_MESSAGES)

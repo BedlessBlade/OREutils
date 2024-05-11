@@ -17,13 +17,13 @@ public class BlockListCommands {
                 .then(ClientCommandManager.literal("remove").then(ClientCommandManager.argument("username", StringArgumentType.string()).suggests(new BlockListRemoveSuggestionProvider()).executes(BlockListCommands::removeBlockList))));
     }
 
-    private static int showBlockList(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int showBlockList(CommandContext<FabricClientCommandSource> context) {
         if(context.getSource().getPlayer() == null)
             return -1;
         context.getSource().getPlayer().sendMessage(Text.literal("Block list:" + ModConfigs.BLOCK_LIST.toString()));
         return 1;
     }
-    private static int addBlockList(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int addBlockList(CommandContext<FabricClientCommandSource> context) {
         if(context.getSource().getPlayer() == null)
             return -1;
          if(!ModConfigs.addToBlockList(StringArgumentType.getString(context, "username"))) {
@@ -33,7 +33,7 @@ public class BlockListCommands {
         context.getSource().sendFeedback(Text.literal("added " + StringArgumentType.getString(context, "username") + " to the block list"));
         return 1;
     }
-    private static int removeBlockList(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int removeBlockList(CommandContext<FabricClientCommandSource> context) {
         if(context.getSource().getPlayer() == null)
             return -1;
         if(!ModConfigs.removeFromBlockList(StringArgumentType.getString(context, "username")))

@@ -1,10 +1,12 @@
 package net.eithan.oreutils;
 
 import net.eithan.oreutils.config.ModConfigs;
+import net.eithan.oreutils.events.EndClientTickEvent;
 import net.eithan.oreutils.events.OnChatMessageEvent;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +41,11 @@ public class OREUtils implements ModInitializer {
 		ClientCommandRegistrationCallback.EVENT.register(SeasonalCommand::register);
 		ClientCommandRegistrationCallback.EVENT.register(BlockListCommands::register);
 		ClientCommandRegistrationCallback.EVENT.register(BooleanCommands::register);
+		ClientCommandRegistrationCallback.EVENT.register(PlotCoordsCommands::register);
 	}
 
 	public static void registerEvents() {
 		ClientReceiveMessageEvents.ALLOW_GAME.register(new OnChatMessageEvent());
+		ClientTickEvents.END_CLIENT_TICK.register(new EndClientTickEvent());
 	}
 }

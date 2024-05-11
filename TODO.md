@@ -7,7 +7,6 @@ just a simple todo page so i can keep track of things :)
   - [ ] Sub-task or description
 -->
 
-- [ ] Add auto plot kicking
 
 ### Completed Column ✓
 <!---
@@ -20,3 +19,5 @@ just a simple todo page so i can keep track of things :)
   - [x] Add blocked player username censoring toggle (also add to config)
 - [x] Added boolean commands for config boolean changes
 - [x] Re-did some config stuff :3
+- [x] Add auto plot kicking
+- [x] Add random timings to auto wb
